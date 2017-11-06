@@ -12,4 +12,7 @@ internal interface FooDao {
 
     @Query("SELECT * FROM Foo ORDER BY id")
     fun allFoos(): List<Foo>
+
+    @Query("SELECT * FROM Foo ORDER BY datetime(timestamp), id")
+    fun allFoosOrderByTimestamp(): List<Foo>
 }
