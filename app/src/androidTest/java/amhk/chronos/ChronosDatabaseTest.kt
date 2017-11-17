@@ -1,5 +1,7 @@
 package amhk.chronos
 
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.Observer
 import android.arch.persistence.room.Room
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
@@ -10,6 +12,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.format.DateTimeFormatter
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 @RunWith(AndroidJUnit4::class)
 class ChronosDatabaseTest {
@@ -52,11 +56,26 @@ class ChronosDatabaseTest {
                 OffsetDateTime.parse("2017-10-17T11:01:12.972-02:00")))
         dao.insert(Foo(ID_NOT_IN_DATABASE, "d",
                 OffsetDateTime.parse("2017-10-17T17:57:01.784+00:00")))
-        val allFoos = dao.allFoosOrderByTimestamp()
+        val allFoos = getValue(dao.allFoosOrderByTimestamp())
         assertEquals(4, allFoos.size)
         assertEquals("a", allFoos[0].data)
         assertEquals("b", allFoos[1].data)
         assertEquals("c", allFoos[2].data)
         assertEquals("d", allFoos[3].data)
     }
+}
+
+internal fun <T> getValue(liveData: LiveData<T>): T {
+    var data: T? = null
+    val latch = CountDownLatch(1)
+    val observer = object : Observer<T> {
+        override fun onChanged(t: T?) {
+            data = t
+            latch.countDown()
+            liveData.removeObserver(this)
+        }
+    }
+    liveData.observeForever(observer)
+    latch.await(2, TimeUnit.SECONDS)
+    return data!!
 }
