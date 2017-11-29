@@ -38,10 +38,7 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             // FIXME: should call lower layers instead of making the switch explicitly
             navigationView.menu.getItem(0).isChecked = true
-            supportFragmentManager.transaction {
-                val fragment = FooListFragment()
-                add(R.id.main_container, fragment)
-            }
+            switchToFragment(FooListFragment::class.java)
         }
     }
 
@@ -55,5 +52,6 @@ class MainActivity : AppCompatActivity() {
 }
 
 private fun FragmentManager.transaction(func: FragmentTransaction.() -> FragmentTransaction) {
+    popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     beginTransaction().func().commit()
 }

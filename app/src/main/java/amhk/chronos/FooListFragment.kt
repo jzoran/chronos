@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -72,7 +73,23 @@ internal class FooAdapter(private val context: Context,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.foo_item, parent, false)
-        return ViewHolder(view)
+        val viewHolder = ViewHolder(view)
+        view.setOnClickListener {
+            showFooAtPosition(viewHolder.adapterPosition)
+        }
+        return viewHolder
+    }
+
+    private fun showFooAtPosition(position: Int) {
+        val foo = items[position]
+        val fragment = FooDetailsFragment.newInstance(foo)
+
+        val activity = context as AppCompatActivity
+        activity.supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.main_container, fragment)
+                .addToBackStack(null)
+                .commit()
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
