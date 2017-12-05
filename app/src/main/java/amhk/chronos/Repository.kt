@@ -10,9 +10,7 @@ internal object Repository {
     private val random = Random()
 
     fun getFooObjects(context: Context): LiveData<List<Foo>> {
-        // FIXME: add intermediate LiveData to filter out false positives, see
-        // https://medium.com/google-developers/7-pro-tips-for-room-fbadea4bfbd1#5e38
-        return ChronosDatabase.get(context).fooDao().allFoosOrderByTimestamp()
+        return ChronosDatabase.get(context).fooDao().allDistinctFoosOrderByTimestamp()
     }
 
     fun insertRandomFoo(context: Context) {
