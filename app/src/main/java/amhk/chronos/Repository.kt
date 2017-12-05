@@ -13,6 +13,10 @@ internal object Repository {
         return ChronosDatabase.get(context).fooDao().allDistinctFoosOrderByTimestamp()
     }
 
+    fun getFooWithId(context: Context, id: Long): LiveData<Foo> {
+        return ChronosDatabase.get(context).fooDao().loadDistinctFooWithId(id)
+    }
+
     fun insertRandomFoo(context: Context) {
         val index = random.nextInt(LOREM_IPSUM.size)
         val database = ChronosDatabase.get(context)

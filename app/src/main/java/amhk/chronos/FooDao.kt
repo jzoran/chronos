@@ -25,6 +25,12 @@ internal abstract class FooDao {
     @Query("DELETE FROM Foo WHERE id == (SELECT id FROM Foo ORDER BY RANDOM() LIMIT 1)")
     abstract fun deleteRandomFoo()
 
+    @Query("SELECT * FROM Foo WHERE id == :id")
+    abstract fun loadFooWithId(id: Long): LiveData<Foo>
+
+    fun loadDistinctFooWithId(id: Long): LiveData<Foo> =
+            loadFooWithId(id).getDistinct()
+
     private fun <T> LiveData<T>.getDistinct(): LiveData<T> {
         val distinctLiveData = MediatorLiveData<T>()
         distinctLiveData.addSource(this, object : Observer<T> {

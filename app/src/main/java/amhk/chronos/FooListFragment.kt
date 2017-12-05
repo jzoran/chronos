@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -15,14 +14,14 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 
-class FooListFragment : Fragment() {
+internal class FooListFragment : Fragment() {
     private lateinit var viewModel: FooViewModel
     private lateinit var adapter: FooAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        adapter = FooAdapter(context)
+        adapter = FooAdapter(context, activity as Navigator)
 
         viewModel = ViewModelProviders.of(this).get(FooViewModel::class.java)
         viewModel.fooObjects.observe(this, Observer<List<Foo>> {
@@ -56,9 +55,16 @@ class FooListFragment : Fragment() {
 
         return view
     }
+
+    internal companion object {
+        fun newInstance(): FooListFragment {
+            return FooListFragment()
+        }
+    }
 }
 
 internal class FooAdapter(private val context: Context,
+                          private val navigator: Navigator,
                           private var items: List<Foo> = ArrayList()) :
         RecyclerView.Adapter<FooAdapter.ViewHolder>() {
 
@@ -97,21 +103,11 @@ internal class FooAdapter(private val context: Context,
         val view = LayoutInflater.from(context).inflate(R.layout.foo_item, parent, false)
         val viewHolder = ViewHolder(view)
         view.setOnClickListener {
-            showFooAtPosition(viewHolder.adapterPosition)
+            val id = items[viewHolder.adapterPosition].id
+            val fragment = FooDetailsFragment.newInstance(id)
+            navigator.goForward(fragment)
         }
         return viewHolder
-    }
-
-    private fun showFooAtPosition(position: Int) {
-        val foo = items[position]
-        val fragment = FooDetailsFragment.newInstance(foo)
-
-        val activity = context as AppCompatActivity
-        activity.supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.main_container, fragment)
-                .addToBackStack(null)
-                .commit()
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

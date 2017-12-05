@@ -1,26 +1,29 @@
 package amhk.chronos
 
 import android.os.Bundle
+import android.support.annotation.IdRes
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentTransaction
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AppCompatActivity
 
-class MainActivity : AppCompatActivity() {
+internal interface Navigator {
+    fun goForward(newFragment: Fragment)
+    fun goBackward()
+    fun goReplace(newFragment: Fragment)
+}
+
+class MainActivity : AppCompatActivity(), Navigator {
     private lateinit var drawer: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         drawer = findViewById(R.id.drawer_layout)
 
         val navigationView = findViewById<NavigationView>(R.id.main_navigation)
         navigationView.setNavigationItemSelectedListener {
-            // FIXME: should just inform the lower layers of the user's intention
-
             for (i in 0 until navigationView.menu.size()) {
                 val item = navigationView.menu.getItem(i)
                 item.isChecked = it.title == item.title
@@ -28,30 +31,53 @@ class MainActivity : AppCompatActivity() {
 
             drawer.closeDrawer(navigationView, true)
             when (it.title) {
-                "foo" -> switchToFragment(FooListFragment::class.java)
-                "bar"-> switchToFragment(BarFragment::class.java)
-                "bar 2" -> switchToFragment(BarFragment::class.java)
-                else -> false
+                "foo" -> goReplace(FooListFragment.newInstance())
+                "bar" -> goReplace(BarFragment.newInstance())
+                "bar 2" -> goReplace(BarFragment.newInstance())
             }
+            true
         }
 
         if (savedInstanceState == null) {
-            // FIXME: should call lower layers instead of making the switch explicitly
-            navigationView.menu.getItem(0).isChecked = true
-            switchToFragment(FooListFragment::class.java)
+            goReplace(FooListFragment.newInstance())
         }
     }
 
-    private fun <T> switchToFragment(x: Class<in T>): Boolean where T: Fragment {
-        supportFragmentManager.transaction {
-            val fragment = x.newInstance() as Fragment
-            replace(R.id.main_container, fragment)
-        }
-        return true
+    override fun onBackPressed() {
+        goBackward()
+    }
+
+    override fun goForward(newFragment: Fragment) =
+            supportFragmentManager.goForward(R.id.main_container, newFragment)
+
+    override fun goBackward() =
+            supportFragmentManager.goBackward(this)
+
+    override fun goReplace(newFragment: Fragment) =
+            supportFragmentManager.goReplace(R.id.main_container, newFragment)
+
+}
+
+private fun FragmentManager.goForward(@IdRes containerId: Int, newFragment: Fragment) {
+    beginTransaction()
+            .addToBackStack(null)
+            .replace(containerId, newFragment)
+            .commit()
+}
+
+private fun FragmentManager.goBackward(activity: AppCompatActivity) {
+    if (backStackEntryCount > 0) {
+        popBackStack()
+    } else {
+        activity.finish()
     }
 }
 
-private fun FragmentManager.transaction(func: FragmentTransaction.() -> FragmentTransaction) {
-    popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-    beginTransaction().func().commit()
+private fun FragmentManager.goReplace(@IdRes containerId: Int, newFragment: Fragment) {
+    while (backStackEntryCount > 0) {
+        popBackStackImmediate()
+    }
+    beginTransaction()
+            .replace(containerId, newFragment)
+            .commit()
 }
