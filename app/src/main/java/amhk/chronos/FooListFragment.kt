@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -62,9 +63,30 @@ internal class FooAdapter(private val context: Context,
         RecyclerView.Adapter<FooAdapter.ViewHolder>() {
 
     fun setItems(newItems: List<Foo>) {
-        items = newItems
-        // FIXME: replace inefficient notifyDataSetChanged with DiffUtils
-        notifyDataSetChanged()
+        if (items.isEmpty()) {
+            items = newItems
+            notifyItemRangeChanged(0, newItems.size)
+        } else {
+            val result = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+                override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                    val oldId = items[oldItemPosition].id
+                    val newId = newItems[newItemPosition].id
+                    return oldId == newId
+                }
+
+                override fun getOldListSize() = items.size
+
+                override fun getNewListSize() = newItems.size
+
+                override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                    val oldItem = items[oldItemPosition]
+                    val newItem = newItems[newItemPosition]
+                    return oldItem == newItem
+                }
+            })
+            items = newItems
+            result.dispatchUpdatesTo(this)
+        }
     }
 
     override fun getItemCount(): Int = items.size
