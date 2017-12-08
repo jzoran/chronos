@@ -56,7 +56,7 @@ class ChronosDatabaseTest {
                 OffsetDateTime.parse("2017-10-17T11:01:12.972-02:00")))
         dao.insert(Foo(ID_NOT_IN_DATABASE, "d",
                 OffsetDateTime.parse("2017-10-17T17:57:01.784+00:00")))
-        val allFoos = getValue(dao.allFoosOrderByTimestamp())
+        val allFoos = getValue(dao.allDistinctFoosOrderByTimestamp())
         assertEquals(4, allFoos.size)
         assertEquals("a", allFoos[0].data)
         assertEquals("b", allFoos[1].data)
