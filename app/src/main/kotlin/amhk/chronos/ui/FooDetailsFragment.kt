@@ -1,5 +1,9 @@
-package amhk.chronos
+package amhk.chronos.ui
 
+import amhk.chronos.database.Foo
+import amhk.chronos.model.FooViewModel
+import amhk.chronos.R
+import amhk.chronos.database.ID_NOT_IN_DATABASE
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle

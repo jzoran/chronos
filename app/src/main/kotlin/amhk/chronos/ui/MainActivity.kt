@@ -1,5 +1,6 @@
-package amhk.chronos
+package amhk.chronos.ui
 
+import amhk.chronos.R
 import android.os.Bundle
 import android.support.annotation.IdRes
 import android.support.design.widget.NavigationView

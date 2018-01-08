@@ -1,5 +1,8 @@
-package amhk.chronos
+package amhk.chronos.ui
 
+import amhk.chronos.database.Foo
+import amhk.chronos.model.FooViewModel
+import amhk.chronos.R
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context

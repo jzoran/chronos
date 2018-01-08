@@ -1,4 +1,4 @@
-package amhk.chronos
+package amhk.chronos.database
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData

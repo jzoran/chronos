@@ -1,4 +1,4 @@
-package amhk.chronos
+package amhk.chronos.database
 
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey

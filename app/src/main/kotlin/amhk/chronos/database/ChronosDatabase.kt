@@ -1,4 +1,4 @@
-package amhk.chronos
+package amhk.chronos.database
 
 import android.arch.persistence.room.*
 import android.content.Context

@@ -1,5 +1,6 @@
-package amhk.chronos
+package amhk.chronos.model
 
+import amhk.chronos.database.Foo
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData

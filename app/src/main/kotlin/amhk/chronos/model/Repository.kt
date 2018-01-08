@@ -1,5 +1,8 @@
-package amhk.chronos
+package amhk.chronos.model
 
+import amhk.chronos.database.ChronosDatabase
+import amhk.chronos.database.Foo
+import amhk.chronos.database.ID_NOT_IN_DATABASE
 import android.arch.lifecycle.LiveData
 import android.content.Context
 import org.threeten.bp.OffsetDateTime
