@@ -9,10 +9,14 @@ internal const val ID_NOT_IN_DATABASE = 0L
 private const val DATABASE_VERSION = 1
 private const val DATABASE_NAME = "chronos"
 
-@Database(entities = arrayOf(Foo::class), version = DATABASE_VERSION, exportSchema = false)
+@Database(entities = arrayOf(Foo::class, BlockEntity::class),
+        version = DATABASE_VERSION,
+        exportSchema = false)
 @TypeConverters(Converters::class)
 internal abstract class ChronosDatabase : RoomDatabase() {
     abstract fun fooDao(): FooDao
+
+    abstract fun blockEntityDao(): BlockEntityDao
 
     companion object {
         private var instance: ChronosDatabase? = null

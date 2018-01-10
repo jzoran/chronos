@@ -1,5 +1,6 @@
 package amhk.chronos
 
+import amhk.chronos.database.BlockEntity
 import amhk.chronos.database.ChronosDatabase
 import amhk.chronos.database.Foo
 import amhk.chronos.database.ID_NOT_IN_DATABASE
@@ -65,6 +66,13 @@ class ChronosDatabaseTest {
         assertEquals("b", allFoos[1].data)
         assertEquals("c", allFoos[2].data)
         assertEquals("d", allFoos[3].data)
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun failToCreateInvalidBlockEntity() {
+        BlockEntity(ID_NOT_IN_DATABASE,
+                OffsetDateTime.parse("2018-01-21T10:00:00.000Z"),
+                OffsetDateTime.parse("2018-01-21T09:00:00.000Z"))
     }
 }
 
