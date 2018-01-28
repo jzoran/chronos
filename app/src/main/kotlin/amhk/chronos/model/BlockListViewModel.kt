@@ -6,7 +6,7 @@ import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Transformations
 
-internal class BlockViewModel(app: Application) : AndroidViewModel(app) {
+internal class BlockListViewModel(app: Application) : AndroidViewModel(app) {
     val liveData: LiveData<List<Block>>
 
     init {

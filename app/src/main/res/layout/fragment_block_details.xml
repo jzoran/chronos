@@ -5,17 +5,17 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/foodetails_id"
+        android:id="@+id/block_details_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/foodetails_value"
+        android:id="@+id/block_details_begin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/foodetails_timestamp"
+        android:id="@+id/block_details_end"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>
