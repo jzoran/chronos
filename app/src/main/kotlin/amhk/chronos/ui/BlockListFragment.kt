@@ -1,5 +1,8 @@
-package amhk.chronos
+package amhk.chronos.ui
 
+import amhk.chronos.R
+import amhk.chronos.model.Block
+import amhk.chronos.model.BlockListViewModel
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
@@ -11,20 +14,19 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 
-internal class FooListFragment : Fragment() {
-    private lateinit var viewModel: FooViewModel
-    private lateinit var adapter: FooAdapter
+internal class BlockListFragment : Fragment() {
+    private lateinit var viewModel: BlockListViewModel
+    private lateinit var adapter: BlockAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        adapter = FooAdapter(context, activity as Navigator)
+        adapter = BlockAdapter(context, activity as Navigator)
 
-        viewModel = ViewModelProviders.of(this).get(FooViewModel::class.java)
-        viewModel.fooObjects.observe(this, Observer<List<Foo>> {
+        viewModel = ViewModelProviders.of(this).get(BlockListViewModel::class.java)
+        viewModel.liveData.observe(this, Observer<List<Block>> {
             it?.let {
                 adapter.setItems(it)
             }
@@ -34,41 +36,29 @@ internal class FooListFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        val view = inflater.inflate(R.layout.fragment_foolist, container, false)
+        val view = inflater.inflate(R.layout.fragment_block_list, container, false)
 
-        view.findViewById<RecyclerView>(R.id.foo_list).also {
+        view.findViewById<RecyclerView>(R.id.block_list).also {
             it.layoutManager = LinearLayoutManager(context)
             it.adapter = adapter
-        }
-
-        view.findViewById<Button>(R.id.insert_random_foo).apply {
-            setOnClickListener({
-                viewModel.insertRandomFoo()
-            })
-        }
-
-        view.findViewById<Button>(R.id.delete_random_foo).apply {
-            setOnClickListener({
-                viewModel.deleteRandomFoo()
-            })
         }
 
         return view
     }
 
     internal companion object {
-        fun newInstance(): FooListFragment {
-            return FooListFragment()
+        fun newInstance(): BlockListFragment {
+            return BlockListFragment()
         }
     }
 }
 
-internal class FooAdapter(private val context: Context,
+internal class BlockAdapter(private val context: Context,
                           private val navigator: Navigator,
-                          private var items: List<Foo> = ArrayList()) :
-        RecyclerView.Adapter<FooAdapter.ViewHolder>() {
+                          private var items: List<Block> = ArrayList()) :
+        RecyclerView.Adapter<BlockAdapter.ViewHolder>() {
 
-    fun setItems(newItems: List<Foo>) {
+    fun setItems(newItems: List<Block>) {
         if (items.isEmpty()) {
             items = newItems
             notifyItemRangeChanged(0, newItems.size)
@@ -100,11 +90,11 @@ internal class FooAdapter(private val context: Context,
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(items[position])
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.foo_item, parent, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.block_item, parent, false)
         val viewHolder = ViewHolder(view)
         view.setOnClickListener {
             val id = items[viewHolder.adapterPosition].id
-            val fragment = FooDetailsFragment.newInstance(id)
+            val fragment = BlockDetailsFragment.newInstance(id)
             navigator.goForward(fragment)
         }
         return viewHolder
@@ -113,8 +103,8 @@ internal class FooAdapter(private val context: Context,
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val textView: TextView = view.findViewById(R.id.text)
 
-        fun bind(item: Foo) {
-            textView.text = "${item.id}: ${item.timestamp} ${item.data}"
+        fun bind(item: Block) {
+            textView.text = "Block ${item.id}"
         }
     }
 }

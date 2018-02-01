@@ -1,5 +1,6 @@
-package amhk.chronos
+package amhk.chronos.ui
 
+import amhk.chronos.R
 import android.os.Bundle
 import android.support.annotation.IdRes
 import android.support.design.widget.NavigationView
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity(), Navigator {
 
             drawer.closeDrawer(navigationView, true)
             when (it.title) {
-                "foo" -> goReplace(FooListFragment.newInstance())
+                "Block list" -> goReplace(BlockListFragment.newInstance())
                 "bar" -> goReplace(BarFragment.newInstance())
                 "bar 2" -> goReplace(BarFragment.newInstance())
             }
@@ -39,7 +40,7 @@ class MainActivity : AppCompatActivity(), Navigator {
         }
 
         if (savedInstanceState == null) {
-            goReplace(FooListFragment.newInstance())
+            goReplace(BlockListFragment.newInstance())
         }
     }
 
