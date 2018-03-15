@@ -1,4 +1,4 @@
-#Chronos
+# Chronos
 
 Android app to track billable hours.
 
@@ -32,5 +32,5 @@ Thanks for helping out!
 
 ## License
 
-This project is licensed under the MIT license: see (LICENCE)[LICENSE] for more
+This project is licensed under the MIT license: see [LICENCE](LICENSE) for more
 information.
