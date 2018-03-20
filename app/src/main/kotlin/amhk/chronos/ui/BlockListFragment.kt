@@ -37,16 +37,14 @@ internal class BlockListFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
-        val view = inflater.inflate(R.layout.fragment_block_list, container, false)
-
-        view.block_list.also {
-            it.layoutManager = LinearLayoutManager(context)
-            it.adapter = adapter
-        }
-
-        return view
-    }
+                              savedInstanceState: Bundle?): View =
+        inflater.inflate(R.layout.fragment_block_list, container, false)
+                .apply {
+                    block_list.also {
+                        it.layoutManager = LinearLayoutManager(context)
+                        it.adapter = adapter
+                    }
+                }
 
     internal companion object {
         fun newInstance(): BlockListFragment {
